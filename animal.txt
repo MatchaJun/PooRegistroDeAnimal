@@ -1,0 +1,4 @@
+Cachorro 5 10
+Gato a 6 11
+Elefante 10 5000
+Cavalo 10 10 10 10
