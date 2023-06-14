@@ -7,10 +7,16 @@ public class Registro implements Serializable {
     private int idade;
     private int peso;
 
-    public Registro(String animal, int idade, int peso){
+    public Registro(String animal, int idade, int peso) throws FileReadingException{
+        if(idade < 0){
+            throw new idadeNaoRegistrada();
+        }
+        if(peso < 0){
+            throw new pesoNaoRegistrado();
+        }
         this.animal = animal;
         this.idade = idade;
-        this.peso=  peso;
+        this.peso = peso;
     }
     public String getAnimal() {
         return animal;

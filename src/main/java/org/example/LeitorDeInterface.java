@@ -1,6 +1,8 @@
 package org.example;
 
 import javax.swing.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class LeitorDeInterface extends Leitor {
     private Tabela tabela = new Tabela();
@@ -41,51 +43,52 @@ public class LeitorDeInterface extends Leitor {
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == JOptionPane.OK_OPTION) {
                 String animal = animalField.getText();
-                int idade = 0;
+                int idade, peso, velocidade, alturaDoPulo;
+                String raca;
+
+
                 try {
                     idade = Integer.parseInt(idadeField.getText());
-                } catch (Exception e) {
-                    System.out.println(FileReadingException.Erros.idadeNaoRegistrada.getDescription());
-                    return;
-                }
-                int peso = 0;
-                try {
-                    peso = Integer.parseInt(pesoField.getText());
-                } catch (Exception e) {
-                    System.out.println(FileReadingException.Erros.pesoNaoRegistrado.getDescription());
-                    return;
+                }catch(Exception e){
+                    idade = -1;
                 }
 
-                Registro registro;
-                if (animal.equalsIgnoreCase("Gato")) {
-                    String raca = racaField.getText();
-                    if (raca.isEmpty()) {
-                        System.out.println(FileReadingException.Erros.racaNaoCategorizada.getDescription());
-                        return;
-                    }
-                    registro = new RegistroGato(animal, raca, idade, peso);
+                try {
+                    peso = Integer.parseInt(pesoField.getText());
+                }catch(Exception e){
+                    peso = -1;
                 }
-                else if (animal.equalsIgnoreCase("Cavalo")) {
-                    int velocidade =0;
-                    try {
-                        velocidade = Integer.parseInt(velocidadeField.getText());
-                    } catch (Exception e) {
-                        System.out.println(FileReadingException.Erros.velocidadeNaoRegistrada.getDescription());
-                        return;
+
+                Registro registro = null;
+                try {
+                    
+                    if (animal.equalsIgnoreCase("Gato")) {
+                        raca = racaField.getText();
+
+                        registro = new RegistroGato(animal, raca, idade, peso);
+                    } else if (animal.equalsIgnoreCase("Cavalo")) {
+                        try {
+                            velocidade = Integer.parseInt(velocidadeField.getText());
+                        }catch (Exception e){
+                            velocidade = -1;
+                        }
+                        try {
+                            alturaDoPulo = Integer.parseInt(alturaDoPuloField.getText());
+                        }catch(Exception e){
+                            alturaDoPulo = -1;
+                        }
+                        registro = new RegistroCavalo(animal, idade, peso, velocidade, alturaDoPulo);
+                    } else {
+                        registro = new Registro(animal, idade, peso);
                     }
-                    int alturaDoPulo = 0;
-                    try {
-                        alturaDoPulo = Integer.parseInt(alturaDoPuloField.getText());
-                    } catch (Exception e) {
-                        System.out.println(FileReadingException.Erros.alturaDoPuloNaoRegistrada.getDescription());
-                        return;
-                    }
-                    registro = new RegistroCavalo(animal, idade, peso, velocidade, alturaDoPulo);
-                }else {
-                    registro = new Registro(animal, idade, peso);
+                    registro.print();
+                    tabela.adicionar(registro);
                 }
-                registro.print();
-                tabela.adicionar(registro);
+                catch (FileReadingException e){
+                    System.out.println(e.getMessage());
+                }catch (NumberFormatException e2){
+                    System.out.println(e2);
+                }
 
                 animalField.setText("");
                 racaField.setText("");

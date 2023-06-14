@@ -1,4 +1,4 @@
-Cachorro 5 10
-Gato a 6 11
+Cachorro 10 5
+Gato 6 6 Siames
 Elefante 10 5000
 Cavalo 10 10 10 10
